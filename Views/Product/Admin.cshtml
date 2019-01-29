@@ -1,0 +1,52 @@
+﻿@using P3AddNewFunctionalityDotNetCore.Models.ViewModels
+@model IEnumerable<P3AddNewFunctionalityDotNetCore.Models.ViewModels.ProductViewModel>
+@{
+    ViewData["Title"] = Localizer["ProductAdministrationModule"];
+    Layout = "_AdminLayout";
+}
+
+<br />
+<div id="panel-body">
+    <a class="btn btn-primary" asp-action="Create" asp-controller="Product">@Localizer["Create"]</a>
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
+            <tr>
+                <th>
+                    <label>@Localizer["Name"]</label>
+                </th>
+                <th>
+                    <label>@Localizer["Description"]</label>
+                </th>
+                <th>
+                    <label>@Localizer["Price"]</label>
+                </th>
+                <th>
+                    <label>@Localizer["Stock"]</label>
+                </th>
+                <th>
+                    <label>@Localizer["Details"]</label>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ProductViewModel p in Model)
+            {
+            <tr>
+                <td>@p.Name</td>
+                <td>@p.Description</td>
+                <td style="text-align:center">@p.Price</td>
+                <td style="text-align:center">@p.Stock</td>
+                <td>@p.Details</td>
+                <td>
+                    <form id="@p.Id" asp-action="DeleteProduct" asp-controller="Product" method="post">
+                        <input type="hidden" name="id" value="@p.Id" />
+                        <button type="submit" class="btn btn-danger">
+                            @Localizer["Delete"]
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
