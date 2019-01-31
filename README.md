@@ -29,7 +29,7 @@ user has access to. This way a user can access any of the organizations applicat
 There are different versions of MSSQL (please use MSSQL for this project and not another database) and when setting up the database server, there are different options that will change the configuration, so the connection strings defined may not work.
 
 The connection strings defined in the project are setup for MSSQL Server Standard 2017. The installation has not created an instance name, so the server is just referred to as "." which means the default instance of MSSQL server
-running on the current machine. They also use the built in windows user which should be setup in MSSQL server by default during installation.
+running on the current machine. The built in windows user which should be setup in MSSQL server by default during installation.
 
 If you have installed MSSQL server express, the value to use for Server is most likely .\SQLEXPRESS, so for example, your P3Referential connection string would be: -
 
