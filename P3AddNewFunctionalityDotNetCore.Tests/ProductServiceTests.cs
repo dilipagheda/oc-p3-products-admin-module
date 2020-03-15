@@ -6,6 +6,7 @@ using P3AddNewFunctionalityDotNetCore.Models.Repositories;
 using P3AddNewFunctionalityDotNetCore.Models.Services;
 using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace P3AddNewFunctionalityDotNetCore.Tests
@@ -147,6 +148,46 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                 Assert.Contains<Product>(expectedMockProduct, returnedValue, new ProductEqualityComparator());
             });
         }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void GetProductByIdViewModel_ShouldReturnCorrectValue(int id)
+        {
+            // Arrange
+            ProductService sut = new ProductService(_mockCart.Object, _mockProductRepository.Object, _mockOrderRepository.Object, _mockLocalizer.Object);
+
+            //Act
+            var returnedValue = sut.GetProductByIdViewModel(id);
+
+            //Assert
+            Assert.IsType<ProductViewModel>(returnedValue);
+
+            var expectedValue = GetMockProductViewModels().FirstOrDefault(x => x.Id == id);
+            Assert.Equal(expectedValue, returnedValue, new ProductViewModelEqualityComparator());
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void GetProductById_ShouldReturnCorrectValue(int id)
+        {
+            // Arrange
+            ProductService sut = new ProductService(_mockCart.Object, _mockProductRepository.Object, _mockOrderRepository.Object, _mockLocalizer.Object);
+
+            //Act
+            var returnedValue = sut.GetProductById(id);
+
+            //Assert
+            Assert.IsType<Product>(returnedValue);
+
+            var expectedValue = GetMockProducts().FirstOrDefault(x => x.Id == id);
+            Assert.Equal(expectedValue, returnedValue, new ProductEqualityComparator());
+        }
+
+
         /// <summary>
         /// Verify that if product name doesn't have a value because of below conditions, correct error is returned.
         /// Scenarios:
