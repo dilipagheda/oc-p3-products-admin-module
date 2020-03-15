@@ -126,7 +126,27 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
 
         }
 
+        [Fact]
+        public void GetAllProducts_ShouldReturnCorrectValue()
+        {
+            // Arrange
+            ProductService sut = new ProductService(_mockCart.Object, _mockProductRepository.Object, _mockOrderRepository.Object, _mockLocalizer.Object);
 
+            //Act
+            var returnedValue = sut.GetAllProducts();
+
+            //Assert
+            Assert.IsType<List<Product>>(returnedValue);
+            
+            //Check total count
+            Assert.Equal(3, returnedValue.Count);
+
+            //Check data
+            GetMockProducts().ForEach(expectedMockProduct =>
+            {
+                Assert.Contains<Product>(expectedMockProduct, returnedValue, new ProductEqualityComparator());
+            });
+        }
         /// <summary>
         /// Verify that if product name doesn't have a value because of below conditions, correct error is returned.
         /// Scenarios:
