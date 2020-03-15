@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Localization;
 using Moq;
 using P3AddNewFunctionalityDotNetCore.Models;
+using P3AddNewFunctionalityDotNetCore.Models.Entities;
 using P3AddNewFunctionalityDotNetCore.Models.Repositories;
 using P3AddNewFunctionalityDotNetCore.Models.Services;
 using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
+using System.Collections.Generic;
 using Xunit;
 
 namespace P3AddNewFunctionalityDotNetCore.Tests
@@ -18,6 +20,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         {
             _mockCart = new Mock<ICart>();
             _mockProductRepository = new Mock<IProductRepository>();
+            _mockProductRepository.Setup(x => x.GetAllProducts()).Returns(GetMockProducts());
             _mockOrderRepository = new Mock<IOrderRepository>();
             _mockLocalizer = new Mock<IStringLocalizer<ProductService>>();
 
@@ -28,6 +31,99 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             _mockLocalizer.Setup(_ => _["MissingStock"]).Returns(new LocalizedString("MissingStock", "MissingStock"));
             _mockLocalizer.Setup(_ => _["StockNotAnInteger"]).Returns(new LocalizedString("StockNotAnInteger", "StockNotAnInteger"));
             _mockLocalizer.Setup(_ => _["StockNotGreaterThanZero"]).Returns(new LocalizedString("StockNotGreaterThanZero", "StockNotGreaterThanZero"));
+        }
+
+        private List<Product> GetMockProducts()
+        {
+            var products = new List<Product>();
+            products.Add(new Product()
+            {
+                Id = 1,
+                Description = "product 1 desc",
+                Details = "product 1 details",
+                Name = "product 1 name",
+                Price = 10.10,
+                Quantity = 20
+            });
+            products.Add(new Product()
+            {
+                Id = 2,
+                Description = "product 2 desc",
+                Details = "product 2 details",
+                Name = "product 2 name",
+                Price = 10.20,
+                Quantity = 30
+            });
+            products.Add(new Product()
+            {
+                Id = 3,
+                Description = "product 3 desc",
+                Details = "product 3 details",
+                Name = "product 3 name",
+                Price = 10.30,
+                Quantity = 40
+            });
+            return products;
+        }
+
+        private List<ProductViewModel> GetMockProductViewModels()
+        {
+            var expectedViewModelId_1 = new ProductViewModel()
+            {
+                Id = 1,
+                Description = "product 1 desc",
+                Details = "product 1 details",
+                Name = "product 1 name",
+                Price = "10.1",
+                Stock = "20"
+            };
+            var expectedViewModelId_2 = new ProductViewModel()
+            {
+                Id = 2,
+                Description = "product 2 desc",
+                Details = "product 2 details",
+                Name = "product 2 name",
+                Price = "10.2",
+                Stock = "30"
+            };
+            var expectedViewModelId_3 = new ProductViewModel()
+            {
+                Id = 3,
+                Description = "product 3 desc",
+                Details = "product 3 details",
+                Name = "product 3 name",
+                Price = "10.3",
+                Stock = "40"
+            };
+            var productViewModels = new List<ProductViewModel>();
+            productViewModels.Add(expectedViewModelId_1);
+            productViewModels.Add(expectedViewModelId_2);
+            productViewModels.Add(expectedViewModelId_3);
+            return productViewModels;
+        }
+
+        [Fact]
+        public void GetAllProductsViewModel_ShouldReturnCorrectValue()
+        {
+            // Arrange
+            ProductService sut = new ProductService(_mockCart.Object, _mockProductRepository.Object, _mockOrderRepository.Object, _mockLocalizer.Object);
+
+            //Act
+            var returnedValue = sut.GetAllProductsViewModel();
+
+            //Assert
+            //Check type
+            Assert.IsType<List<ProductViewModel>>(returnedValue);
+            
+            //Check total count
+            Assert.Equal(3, returnedValue.Count);
+
+            //Check data
+            GetMockProductViewModels().ForEach(expectedProductViewModel =>
+            {
+                Assert.Contains<ProductViewModel>(expectedProductViewModel, returnedValue, new ProductViewModelEqualityComparator());
+            });
+
         }
 
 
