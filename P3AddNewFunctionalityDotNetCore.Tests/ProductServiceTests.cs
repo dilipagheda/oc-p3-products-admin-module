@@ -5,8 +5,10 @@ using P3AddNewFunctionalityDotNetCore.Models.Entities;
 using P3AddNewFunctionalityDotNetCore.Models.Repositories;
 using P3AddNewFunctionalityDotNetCore.Models.Services;
 using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -494,6 +496,42 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
 
             //Assert
             Assert.True(validationErrors.Count == 0);
+        }
+
+        [Fact]
+        public void SaveProduct_ShouldCallCorrectMethod()
+        {
+            // Arrange
+            ProductService sut = new ProductService(_mockCart.Object, _mockProductRepository.Object, _mockOrderRepository.Object, _mockLocalizer.Object);
+
+            ProductViewModel productViewModel = new ProductViewModel()
+            {
+                Name = "test product name",
+                Description = "test description",
+                Details = "test details",
+                Stock = "12",
+                Price = "22",
+            };
+            // Act
+            sut.SaveProduct(productViewModel);
+
+            //Assert
+            var expectedProductAsArgument = new Product()
+            {
+                Description = "test description",
+                Details = "test details",
+                Name = "test product name",
+                Price = 22,
+                Quantity = 12,
+            };
+
+            Expression<Func<Product, bool>> e = p => p.Description == expectedProductAsArgument.Description
+                                                    && p.Details == expectedProductAsArgument.Details
+                                                    && p.Name == expectedProductAsArgument.Name
+                                                    && p.Price == expectedProductAsArgument.Price
+                                                    && p.Quantity == expectedProductAsArgument.Quantity;
+
+            _mockProductRepository.Verify(x => x.SaveProduct(It.Is<Product>(e)), Times.Once);
         }
     }
 }
