@@ -533,5 +533,26 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
 
             _mockProductRepository.Verify(x => x.SaveProduct(It.Is<Product>(e)), Times.Once);
         }
+
+        [Fact]
+        public void DeleteProduct_ShouldCallCorrectMethod()
+        {
+            // Arrange
+            ProductService sut = new ProductService(_mockCart.Object, _mockProductRepository.Object, _mockOrderRepository.Object, _mockLocalizer.Object);
+
+            ProductViewModel productViewModel = new ProductViewModel()
+            {
+                Name = "test product name",
+                Description = "test description",
+                Details = "test details",
+                Stock = "12",
+                Price = "22",
+            };
+            // Act
+            sut.DeleteProduct(1);
+            //Assert
+            _mockCart.Verify(x => x.RemoveLine(It.Is<Product>(p => p.Id == 1)), Times.Once);
+            _mockProductRepository.Verify(x => x.DeleteProduct(1), Times.Once);
+        }
     }
 }
