@@ -7,6 +7,7 @@ using P3AddNewFunctionalityDotNetCore.Models.Services;
 using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace P3AddNewFunctionalityDotNetCore.Tests
@@ -20,8 +21,28 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         public ProductServiceTests()
         {
             _mockCart = new Mock<ICart>();
+            _mockCart.SetupGet(x => x.Lines).Returns(new List<CartLine>() {
+                new CartLine()
+                {
+                    OrderLineId = 1,
+                    Product = GetMockProducts().FirstOrDefault(x => x.Id == 1),
+                    Quantity = 10
+                },
+                new CartLine()
+                {
+                    OrderLineId = 2,
+                    Product = GetMockProducts().FirstOrDefault(x => x.Id == 2),
+                    Quantity = 20
+                }
+             });
+
             _mockProductRepository = new Mock<IProductRepository>();
-            _mockProductRepository.Setup(x => x.GetAllProducts()).Returns(GetMockProducts());
+            _mockProductRepository.Setup(x => x.GetAllProducts())
+                                  .Returns(GetMockProducts());
+
+            _mockProductRepository.Setup(x => x.GetProduct(It.IsAny<int>()))
+                                  .Returns<int>((id) => Task.FromResult(GetMockProducts().FirstOrDefault(x => x.Id == id)));
+
             _mockOrderRepository = new Mock<IOrderRepository>();
             _mockLocalizer = new Mock<IStringLocalizer<ProductService>>();
 
@@ -187,6 +208,41 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             Assert.Equal(expectedValue, returnedValue, new ProductEqualityComparator());
         }
 
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public async void GetProduct_ShouldReturnCorrectValue(int id)
+        {
+            // Arrange
+            ProductService sut = new ProductService(_mockCart.Object, _mockProductRepository.Object, _mockOrderRepository.Object, _mockLocalizer.Object);
+
+            //Act
+            var returnedValue = await sut.GetProduct(id);
+
+            //Assert
+            Assert.IsType<Product>(returnedValue);
+
+            var expectedValue = GetMockProducts().FirstOrDefault(x => x.Id == id);
+            Assert.Equal(expectedValue, returnedValue, new ProductEqualityComparator());
+        }
+
+        [Theory]
+        [InlineData(1,10)]
+        [InlineData(2, 20)]
+        public void UpdateProductQuantities_ShouldCallCorrectMethod(int productId, int quantityToRemove)
+        {
+            // Arrange
+            ProductService sut = new ProductService(_mockCart.Object, _mockProductRepository.Object, _mockOrderRepository.Object, _mockLocalizer.Object);
+
+            //Act
+            sut.UpdateProductQuantities();
+
+            //Assert
+            _mockProductRepository.Verify(x => x.UpdateProductStocks(productId,quantityToRemove), Times.Once);
+        }
+
+
 
         /// <summary>
         /// Verify that if product name doesn't have a value because of below conditions, correct error is returned.
@@ -224,6 +280,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         /// Scenarios:
         ///     price is null
         ///     price only contains white space
+        ///     TODO: add both positive/negative, garbage chars, control/special chars
         /// </summary>
         [Theory]
         [InlineData(null)]
@@ -264,6 +321,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         [InlineData("   ")]
         [InlineData("price")]
         [InlineData("p30")]
+        [InlineData("!!#!@")]
         public void CheckProductModelErrors_PriceMustBeNumeric(string price)
         {
             // Arrange
@@ -359,6 +417,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         [Theory]
         [InlineData("qty")]
         [InlineData("10.10")]
+        [InlineData("*!@#$@#")]
+        [InlineData("10abcd")]
         public void CheckProductModelErrors_QtyMustBeInteger(string qty)
         {
             // Arrange
@@ -410,6 +470,30 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             // Assert
             Assert.True(validationErrors.Count > 0);
             Assert.Contains("StockNotGreaterThanZero", validationErrors);
+        }
+
+        [Theory]
+        [InlineData(1,"test name","test desc","test details","10","10")]
+        [InlineData(2, " test name & * ", "  test desc  +=123*&%$", "  test details !@#$%^^&*()_+ ", "10", "10.23")]
+        public void CheckProductModelErrors_ShouldBeNoErrorsForValidData(int id, string name, string desc, string details, string stock, string price)
+        {
+            // Arrange
+            ProductService sut = new ProductService(_mockCart.Object, _mockProductRepository.Object, _mockOrderRepository.Object, _mockLocalizer.Object);
+
+            ProductViewModel productViewModel = new ProductViewModel()
+            {
+                Id = id,
+                Name = name,
+                Description = desc,
+                Details = details,
+                Stock = stock,
+                Price = price,
+            };
+            // Act
+            var validationErrors = sut.CheckProductModelErrors(productViewModel);
+
+            //Assert
+            Assert.True(validationErrors.Count == 0);
         }
     }
 }
