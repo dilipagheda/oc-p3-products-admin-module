@@ -7,7 +7,6 @@ namespace P3AddNewFunctionalityDotNetCore.Models
     public class Cart : ICart
     {
         private readonly List<CartLine> _cartLines;
-
         public Cart()
         {
             _cartLines = new List<CartLine>();

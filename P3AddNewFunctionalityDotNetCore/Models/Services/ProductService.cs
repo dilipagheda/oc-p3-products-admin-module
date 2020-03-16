@@ -83,8 +83,8 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
         }
         public void UpdateProductQuantities()
         {
-            Cart cart = (Cart) _cart;
-            foreach (CartLine line in cart.Lines)
+            //Cart cart = (Cart) _cart;
+            foreach (CartLine line in _cart.Lines)
             {
                 _productRepository.UpdateProductStocks(line.Product.Id, line.Quantity);
             }
