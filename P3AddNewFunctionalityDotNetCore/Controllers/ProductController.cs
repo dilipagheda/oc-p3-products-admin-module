@@ -46,7 +46,7 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
             modelErrors = _productService.CheckProductModelErrors(product);
             foreach (string error in modelErrors)
             {
-                ModelState.AddModelError("", error);
+                ModelState.AddModelError(error, error);
             }
 
             if (ModelState.IsValid)
