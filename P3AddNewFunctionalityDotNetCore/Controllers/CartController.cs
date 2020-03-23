@@ -19,8 +19,7 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
 
         public ViewResult Index()
         {
-            Cart cart = _cart as Cart;
-            return View(cart);
+            return View(_cart);
         }
 
         [HttpPost]
