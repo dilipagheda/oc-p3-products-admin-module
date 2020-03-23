@@ -28,13 +28,13 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
         [HttpPost]
         public IActionResult Index(OrderViewModel order)
         {
-            if (!((Cart) _cart).Lines.Any())
+            if (!_cart.Lines.Any())
             {
                 ModelState.AddModelError("", _localizer["CartEmpty"]);
             }
             if (ModelState.IsValid)
             {
-                order.Lines = ((Cart) _cart)?.Lines.ToArray();
+                order.Lines = (_cart)?.Lines.ToArray();
                 _orderService.SaveOrder(order);
                 return RedirectToAction(nameof(Completed));
             }
