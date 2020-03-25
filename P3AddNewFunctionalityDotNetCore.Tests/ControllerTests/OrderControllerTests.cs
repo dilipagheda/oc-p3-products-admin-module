@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace P3AddNewFunctionalityDotNetCore.Tests
+namespace P3AddNewFunctionalityDotNetCore.UnitTests.ControllerTests
 {
     public class OrderControllerTests
     {

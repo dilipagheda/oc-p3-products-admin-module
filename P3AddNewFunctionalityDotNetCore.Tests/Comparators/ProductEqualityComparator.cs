@@ -1,18 +1,19 @@
-﻿using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
+﻿using P3AddNewFunctionalityDotNetCore.Models.Entities;
+using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace P3AddNewFunctionalityDotNetCore.Tests
+namespace P3AddNewFunctionalityDotNetCore.UnitTests.Comparators
 {
-    class ProductViewModelEqualityComparator : IEqualityComparer<ProductViewModel>
+    class ProductEqualityComparator : IEqualityComparer<Product>
     {
-        public bool Equals(ProductViewModel x, ProductViewModel y)
+        public bool Equals(Product x, Product y)
         {
-            if(x.Id == y.Id && 
+            if (x.Id == y.Id &&
                x.Name == y.Name &&
                x.Price == y.Price &&
-               x.Stock == y.Stock &&
+               x.Quantity == y.Quantity &&
                x.Details == y.Details &&
                x.Description == y.Description)
             {
@@ -24,7 +25,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             }
         }
 
-        public int GetHashCode(ProductViewModel obj)
+        public int GetHashCode(Product obj)
         {
             return obj.Id.GetHashCode();
         }

@@ -4,7 +4,7 @@ using Moq;
 using P3AddNewFunctionalityDotNetCore.Models.Services;
 using Xunit;
 
-namespace P3AddNewFunctionalityDotNetCore.Tests
+namespace P3AddNewFunctionalityDotNetCore.UnitTests.ServiceTests
 {
     public class LanguageServiceTests
     {

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.329
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3AddNewFunctionalityDotNetCore.Tests", "P3AddNewFunctionalityDotNetCore.Tests\P3AddNewFunctionalityDotNetCore.Tests.csproj", "{7844011C-847B-4894-B918-5FB030BAB3DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3AddNewFunctionalityDotNetCore.UnitTests", "P3AddNewFunctionalityDotNetCore.Tests\P3AddNewFunctionalityDotNetCore.UnitTests.csproj", "{7844011C-847B-4894-B918-5FB030BAB3DF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3AddNewFunctionalityDotNetCore", "P3AddNewFunctionalityDotNetCore\P3AddNewFunctionalityDotNetCore.csproj", "{752FB11B-71BE-4ECC-923A-997D50794E8B}"
 EndProject
