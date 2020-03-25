@@ -149,7 +149,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             Assert.Equal(orderViewModel.Country, orderPassedAsArgument.Country);
             Assert.Equal(orderViewModel.Name, orderPassedAsArgument.Name);
             Assert.Equal(orderViewModel.Zip, orderPassedAsArgument.Zip);
-            Assert.Equal(DateTime.Now.ToString("yyyyMMdd"), orderPassedAsArgument.Date.ToString("yyyyMMdd"));
+            Assert.Equal(DateTime.UtcNow.ToString("yyyyMMdd"), orderPassedAsArgument.Date.ToString("yyyyMMdd"));
             Assert.Equal(orderViewModel.Lines.Count, orderPassedAsArgument.OrderLine.Count);
         }
     }
