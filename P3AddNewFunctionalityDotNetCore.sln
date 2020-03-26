@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3AddNewFunctionalityDotNet
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3AddNewFunctionalityDotNetCore", "P3AddNewFunctionalityDotNetCore\P3AddNewFunctionalityDotNetCore.csproj", "{752FB11B-71BE-4ECC-923A-997D50794E8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3AddNewFunctionalityDotNetCore.IntegrationTests", "IntegrationTests\P3AddNewFunctionalityDotNetCore.IntegrationTests.csproj", "{2FCC057D-AA7A-42AB-80D0-D0CC179C02CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{752FB11B-71BE-4ECC-923A-997D50794E8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{752FB11B-71BE-4ECC-923A-997D50794E8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{752FB11B-71BE-4ECC-923A-997D50794E8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FCC057D-AA7A-42AB-80D0-D0CC179C02CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FCC057D-AA7A-42AB-80D0-D0CC179C02CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FCC057D-AA7A-42AB-80D0-D0CC179C02CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FCC057D-AA7A-42AB-80D0-D0CC179C02CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
