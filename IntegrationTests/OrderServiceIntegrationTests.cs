@@ -205,7 +205,7 @@ namespace P3AddNewFunctionalityDotNetCore.IntegrationTests
             var options = TestDbContextOptionsBuilder();
             SeedTestDb(options);
 
-            //This product should exist in the Products table (It is part of initial data seed)
+            //This product should exist in the Products table (It is added as part of initial data seed)
             var productPurchased = new Product()
             {
                 Id = 2,
