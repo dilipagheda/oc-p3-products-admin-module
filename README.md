@@ -1,4 +1,18 @@
-# DotNetEnglishP3
+# Project 3 
+## Unit Tests and Integration Tests using xUnit, EF Core, Moq
+
+This is the 3rd project as part of OpenclassRoom's .NET Developer Path. It is about creating unit tests and integration testing with as much coverage as possible. The idea is to have atleast one unit test per method and at least couple of integration tests for each services that calls repository class methods.
+
+# Skills Used
+* Entity Framework core - In Memory DB for integration testing
+* xUnit
+* Moq for mocking framework
+* Understanding the codebase and be able to provide complete unit test and integration test coverage
+* Test driven development
+* Enforce good coding practice by adopting test first approach
+
+# Notes on How to set up locally
+
 Student repo for project 3 of the Back-end developer: .NET path
 
 This project has a supporting database which will be created the first time the application is run. In order for the database to be correctly
