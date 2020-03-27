@@ -199,11 +199,24 @@ namespace P3AddNewFunctionalityDotNetCore.IntegrationTests
 
 
         [Fact]
-        public void Test_New_Order_Can_Be_Saved_To_Database()
+        public void Test_Given_Cart_Contains_Product_ToCheckout_New_Order_Can_Be_Saved_To_Database_ShouldUpdateStockInProductsTable()
         {
             //Arrange
             var options = TestDbContextOptionsBuilder();
+            SeedTestDb(options);
 
+            //This product should exist in the Products table (It is part of initial data seed)
+            var productPurchased = new Product()
+            {
+                Id = 2,
+                Description = "test desc 2",
+                Details = "test details 2",
+                Name = "test product 2",
+                Price = 20.10,
+                Quantity = 200
+            };
+
+            //Prepare the order to add 
             var orderToAdd = new OrderViewModel()
             {
                 Name = "new order",
@@ -215,23 +228,19 @@ namespace P3AddNewFunctionalityDotNetCore.IntegrationTests
                 {
                     new CartLine()
                     {
-                        Product = new Product()
-                        {
-                            Id = 2,
-                            Description = "test desc 1",
-                            Details = "test details 1",
-                            Name = "test product 1",
-                            Price = 10.10,
-                            Quantity = 100
-                        }
+                        Product = productPurchased,
+                        Quantity = 10
                     }
-
                 }
             };
 
             using (var context = new P3Referential(options))
             {
                 var cart = new Cart();
+                
+                //Add the item to the cart
+                cart.AddItem(productPurchased, 10);
+
                 var productRepository = new ProductRepository(context);
                 var orderRepository = new OrderRepository(context);
                 var productService = new ProductService(cart, productRepository, null, null);
@@ -245,12 +254,17 @@ namespace P3AddNewFunctionalityDotNetCore.IntegrationTests
             using (var context = new P3Referential(options))
             {
                 var savedOrders = context.Order.Include(x => x.OrderLine).ToList();
-                Assert.Single(savedOrders);
+                Assert.Equal(_testOrdersList.Count + 1,savedOrders.Count);
                 Assert.IsAssignableFrom<List<Order>>(savedOrders);
 
-                var savedOrder = savedOrders.Find(x => x.Id == 1);
+                //get the most recent order which is just newly added (2 were pre-existing)
+                var savedOrder = savedOrders.Find(x => x.Id == 3);
+
+                //get the orderLine of order passed in for adding
                 var orderToAddFirstLine = orderToAdd.Lines.First(x => x.Product.Id == 2);
-                var savedOrderFirstLine = savedOrder.OrderLine.First(x => x.Id == 1);
+
+                //get the orderLine of actual saved
+                var savedOrderFirstLine = savedOrder.OrderLine.First(x => x.ProductId == 2);
 
                 var doesDataMatch = orderToAdd.Address == savedOrder.Address
                     && orderToAdd.City == savedOrder.City
@@ -260,6 +274,9 @@ namespace P3AddNewFunctionalityDotNetCore.IntegrationTests
                     && orderToAddFirstLine.Quantity == savedOrderFirstLine.Quantity;
 
                 Assert.True(doesDataMatch);
+
+                //Check if product stock is reduced after the order
+                Assert.Equal(200 - 10, context.Product.ToList().Find(x => x.Id == 2).Quantity);
 
                 //Cleanup
                 context.Database.EnsureDeleted();
