@@ -43,7 +43,10 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Repositories
             Product product = _context.Product.First(p => p.Id == id);
             product.Quantity = product.Quantity - quantityToRemove;
 
-            if (product.Quantity == 0)
+            /*Bug Fixed: This condition should be <= 0 to cater for the scenario where
+             * Product stock is already 0 and this method gets called with quantityToRemove as greater than zero.
+             */
+            if (product.Quantity <= 0)
                 _context.Product.Remove(product);
             else
             {
@@ -56,18 +59,17 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Repositories
         {
             if (product != null)
             {
-               
-
                 _context.Product.Add(product);
                 _context.SaveChanges();
             }
         }
 
-  
-
         public void DeleteProduct(int id)
         {
-            Product product = _context.Product.First(p => p.Id == id);
+            //Bug fix - Changed First to FirstOrDefault to unit test null condition
+            //First will cause exception if product not found
+            //FirstOrDefault will return null if proudct not found
+            Product product = _context.Product.FirstOrDefault(p => p.Id == id);
             if (product != null)
             {
                 _context.Product.Remove(product);
