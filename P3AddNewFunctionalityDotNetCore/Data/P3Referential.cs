@@ -10,6 +10,12 @@ namespace P3AddNewFunctionalityDotNetCore.Data
         {
         }
 
+        //Added a constructor with no arguments for unit testing
+        public P3Referential()
+        {
+
+        }
+
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderLine> OrderLine { get; set; }
         public virtual DbSet<Product> Product { get; set; }
