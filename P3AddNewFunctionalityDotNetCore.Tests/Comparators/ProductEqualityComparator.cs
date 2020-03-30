@@ -6,7 +6,7 @@ using System.Text;
 
 namespace P3AddNewFunctionalityDotNetCore.UnitTests.Comparators
 {
-    class ProductEqualityComparator : IEqualityComparer<Product>
+    public class ProductEqualityComparator : IEqualityComparer<Product>
     {
         public bool Equals(Product x, Product y)
         {

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace P3AddNewFunctionalityDotNetCore.UnitTests.Comparators
 {
-    class OrderEqualityComparator : IEqualityComparer<Order>
+    public class OrderEqualityComparator : IEqualityComparer<Order>
     {
         public bool Equals(Order x, Order y)
         {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace P3AddNewFunctionalityDotNetCore.UnitTests.Comparators
 {
-    class ProductViewModelEqualityComparator : IEqualityComparer<ProductViewModel>
+    public class ProductViewModelEqualityComparator : IEqualityComparer<ProductViewModel>
     {
         public bool Equals(ProductViewModel x, ProductViewModel y)
         {
