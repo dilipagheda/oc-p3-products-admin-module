@@ -9,7 +9,8 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private static P3Referential _context;
+        //Bug Fix: context should not be static as it will result in race conditions by multiple threads
+        private readonly P3Referential _context;
 
         public ProductRepository(P3Referential context)
         {
