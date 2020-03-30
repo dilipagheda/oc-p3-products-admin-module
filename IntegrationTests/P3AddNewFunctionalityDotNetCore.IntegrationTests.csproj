@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\P3AddNewFunctionalityDotNetCore.Tests\P3AddNewFunctionalityDotNetCore.UnitTests.csproj" />
     <ProjectReference Include="..\P3AddNewFunctionalityDotNetCore\P3AddNewFunctionalityDotNetCore.csproj" />
   </ItemGroup>
 

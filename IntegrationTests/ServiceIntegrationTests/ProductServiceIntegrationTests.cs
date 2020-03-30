@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTests
+namespace P3AddNewFunctionalityDotNetCore.IntegrationTests.ServiceIntegrationTests
 {
     public class ProductServiceIntegrationTests
     {
